@@ -31,10 +31,32 @@ router.get('/profile', (req, res, next) => {
   res.send('GET /profile')
 });
 
-/* PUT /profile --> para actualizar */
-router.put('/profile', (req, res, next) => {
-  res.send('PUT /profile')
+/* PUT /profile/:user_id --> para actualizar */
+router.put('/profile/:user_id', (req, res, next) => {
+  res.send('PUT /profile/:user_id');
 });
+
+/* GET /forgot-password */
+router.get('/forgot-pw', (req, res, next) => {
+  res.send('GET /forgot-password')
+});
+
+/* PUT /forgot-password */
+router.put('/forgot-pw', (req, res, next) => {
+  res.send('PUT /forgot-password')
+});
+
+/* GET /reset-password */
+router.get('/reset-pw/:token', (req, res, next) => {
+  res.send('GET /reset-password/:token')
+});
+
+/* PUT /reset-password */
+router.put('/reset-pw/:token', (req, res, next) => {
+  res.send('PUT /reset-password/:token')
+});
+
+
 
 
 module.exports = router;
