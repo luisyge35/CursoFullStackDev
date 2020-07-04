@@ -10,7 +10,6 @@ const mongoose      = require('mongoose');
 
 // Require routes
 const indexRouter   = require('./routes/index');
-const usersRouter   = require('./routes/users');
 const postsRouter   = require('./routes/posts');
 const reviewsRouter = require('./routes/reviews')
 
@@ -44,13 +43,15 @@ app.use(session({
   saveUninitialized: true,
 }))
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 // Mount routes
 app.use('/', indexRouter);
-//app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 app.use('/posts/:id/reviews', reviewsRouter);
 
