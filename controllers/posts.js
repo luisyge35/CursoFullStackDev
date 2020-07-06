@@ -39,14 +39,55 @@ module.exports = {
     },
 
     async postUpdate(req, res, next) {
-        // Handle any deletion of existin images
-        // Handle upload of any new images
-        let post = await Post.findByIdAndUpdate(req.params.id, req.body.post, {new: true});
+        // find post by id
+        let post = await Post.findById(req.params.id);
+        // check if there's any images for deletion
+        if(req.body.deleteImages && req.body.deleteImages.length){
+            // assign deleteImages fron req.body to its own variable
+            let deleteImages = req.body.deleteImages;
+            //loop over deleteImages
+            for(const public_id of deleteImages){
+                // delete images from cloudinary
+                await cloudinary.uploader.destroy(public_id);
+                // delete image from post.images
+                for(const image of post.images){
+                    if(image.public_id === public_id){
+                        let index = post.images.indexOf(image)
+                        // quit the image from the array using splice
+                        post.images.splice(index, 1);
+                    }
+                }
+            }
+        }
+        // check if there are any new images to upload
+        if(req.files){
+            // add images to post.images array
+            for(const file of req.files){
+                let image = await cloudinary.uploader.upload(file.path);
+                post.images.push({
+                    url: image.secure_url,
+                    public_id: image.public_id,
+                })
+            }
+        }
+        // Update the other stuff
+        post.title = req.body.post.title;
+        post.description = req.body.post.description;
+        post.price = req.body.post.price;
+        post.location = req.body.post.location;
+        // and save
+        post.save();
+        // Redirect to posts page
         res.redirect(`/posts/${post.id}`);
     },
 
     async postDelete(req, res, next) {
-        let post = await Post.findByIdAndRemove(req.params.id);
+        // we want to delete the post and the photos from cloudinaty
+        let post = await Post.findById(req.params.id);
+        for(const image of post.images){
+            await cloudinary.uploader.destroy(image.public_id);
+        }
+        await post.remove();
         res.redirect('/posts')
     }
 } 
