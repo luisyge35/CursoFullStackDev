@@ -18,13 +18,10 @@ module.exports = {
     async postCreate(req, res, next) {
         req.body.post.images = [];
         for(const file of req.files){
-            console.log(file)
             let image = await cloudinary.uploader.upload(file.path);
-            console.log('Image:', image);
             req.body.post.images.push({
                 url: image.secure_url,
                 public_id: image.public_id,
-                t: "3"
             })
         }
         let post = await Post.create(req.body.post);
@@ -42,7 +39,9 @@ module.exports = {
     },
 
     async postUpdate(req, res, next) {
-        let post = await Post.findByIdAndUpdate(req.params.id, req.body.post);
+        // Handle any deletion of existin images
+        // Handle upload of any new images
+        let post = await Post.findByIdAndUpdate(req.params.id, req.body.post, {new: true});
         res.redirect(`/posts/${post.id}`);
     },
 
