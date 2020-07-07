@@ -17,7 +17,7 @@ const reviewsRouter = require('./routes/reviews')
 const app = express();
 
 // Conectar a data base
-mongoose.connect('mongodb+srv://test:test@surf-shop.ctdgo.gcp.mongodb.net/surf-shop?retryWrites=true&w=majority', 
+mongoose.connect('mongodb+srv://test:test@surf-shop.ctdgo.gcp.mongodb.net/surf-shop-mapbox?retryWrites=true&w=majority', 
                 {useNewUrlParser: true,
                  useUnifiedTopology: true
                 });
@@ -30,6 +30,7 @@ db.once('open', () => {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use(express.static('public'))
 
 app.use(logger('dev'));
 app.use(express.json());

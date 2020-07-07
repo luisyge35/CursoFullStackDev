@@ -7,8 +7,7 @@ const PostSchema = new Schema({
     description: String,
     images: [ {url: String , public_id: String, t: String} ],
     location: String,
-    lat: Number,
-    lng: Number,
+    coordinates: Array,
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -20,7 +19,5 @@ const PostSchema = new Schema({
         }
     ]
 });
-
-
 
 module.exports = mongoose.model('Post',PostSchema);
