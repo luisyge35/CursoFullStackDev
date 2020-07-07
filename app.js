@@ -17,7 +17,7 @@ const reviewsRouter = require('./routes/reviews')
 const app = express();
 
 // Conectar a data base
-mongoose.connect('mongodb+srv://test:test@surf-shop.ctdgo.gcp.mongodb.net/surf-shop?retryWrites=true&w=majority', 
+mongoose.connect(process.env.MONGODB, 
                 {useNewUrlParser: true,
                  useUnifiedTopology: true
                 });
