@@ -1,6 +1,7 @@
 require('dotenv').config();
 const createError   = require('http-errors');
 const express       = require('express');
+const engine        = require('ejs-mate');
 const path          = require('path');
 const cookieParser  = require('cookie-parser');
 const logger        = require('morgan');
@@ -28,6 +29,7 @@ db.once('open', () => {
       console.log('CONNECTED TO MONGODB!!!')
 });
 // view engine setup
+app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static('public'))
@@ -53,6 +55,12 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+//ttile middleware
+app.use(function(req, res, next) {
+  res.locals.title = "Surf shop";
+  next()
+})
+
 // Mount routes
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
@@ -73,5 +81,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
