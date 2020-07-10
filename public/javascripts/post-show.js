@@ -29,3 +29,8 @@ $(this).text() === "Edit" ? $(this).text("Cancel") : $(this).text("Edit");
   // toggle visibility of the edit form
 $(this).siblings(".edit-review-form").toggle();
 });
+
+// add click listener for clearing of rating stars
+$('.clear-rating').click(function(){
+    $(this).siblings('.input-no-rate').click();
+});
